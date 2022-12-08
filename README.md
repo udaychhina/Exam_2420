@@ -77,9 +77,9 @@ The script:
 ```bash
 #!/bin/bash
 
-USERS=($(grep ":[1-5][0-9][0-9][0-9]:" /etc/passwd | awk '{print $1}' FS=:))
-IDS=($(grep ":[1-5][0-9][0-9][0-9]:" /etc/passwd | awk '{print $3}' FS=:))
-SHELLS=($(grep ":[1-5][0-9][0-9][0-9]:" /etc/passwd | awk '{print $7}' FS=:))
+USERS=$(grep ":[1-5][0-9][0-9][0-9]:" /etc/passwd | awk '{print $1}' FS=:)
+IDS=$(grep ":[1-5][0-9][0-9][0-9]:" /etc/passwd | awk '{print $3}' FS=:)
+SHELLS=$(grep ":[1-5][0-9][0-9][0-9]:" /etc/passwd | awk '{print $7}' FS=:)
 LOGGEDIN=$(who | awk '{print $1}')
 
 
