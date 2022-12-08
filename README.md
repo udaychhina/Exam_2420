@@ -138,3 +138,13 @@ OnCalendar=*-*-* 00:00:00
 [Install]
 WantedBy=timers.target
 ```
+
+The timer file was placed in `/etc/systemd/system/find_users.timer`.
+
+The timer was enabled with `sudo systemctl enable find_users.timer`.
+
+It was started with `sudo systemctl start find_users.timer`.
+
+The timer was checked with `sudo systemctl status find_users.timer`:
+
+![timer](/Images/timer.png)
