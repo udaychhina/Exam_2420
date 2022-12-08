@@ -66,3 +66,75 @@ boot.
 5. The final command is:
 
 ![finalcommand](Images/finalcommand.png)
+
+
+### Part 4
+
+The script:
+
+```bash
+#!/bin/bash
+
+USERS=$(grep ":[1-5][0-9][0-9][0-9]:" /etc/passwd | awk '{print $1}' FS=:)
+IDS=$(grep ":[1-5][0-9][0-9][0-9]:" /etc/passwd | awk '{print $3}' FS=:)
+SHELLS=$(grep ":[1-5][0-9][0-9][0-9]:" /etc/passwd | awk '{print $7}' FS=:)
+LOGGEDIN=$(who | awk '{print $1}')
+
+
+for (( i=0; i<${#USERS[@]}; i++ )); do
+  LINES="${USERS[$i]} ${IDS[$i]} ${SHELLS[$i]}"
+done
+
+echo "${LINES}"
+
+echo "Regular users on the system are:" > /etc/motd
+for line in "$LINES"; do
+  echo $line >> /etc/motd
+done
+
+echo " " >> /etc/motd
+echo " " >> /etc/motd
+
+echo "Users currently logged in are:" >> /etc/motd
+echo $LOGGEDIN >> /etc/motd
+```
+
+### Part 5
+
+The service file:
+```
+[Unit]
+Description=find the current users
+
+[Service]
+Type=oneshot
+ExecStart=/opt/find_users/find_users
+
+[Install]
+WantedBy=multi-user.target
+```
+
+The service file was placed in `/etc/systemd/system/find_users.service`.
+
+The service was enabled with `sudo systemctl enable find_users.service`.
+
+It was started with `sudo systemctl start find_users.service`.
+
+The service was checked with `sudo systemctl status find_users.service`:
+
+![service](/Images/service.png)
+
+### Part 6
+
+The timer file:
+```
+[Unit]
+Description=timer to start the find users service on boot
+
+[Timer]
+OnBootSec=60
+OnCalendar=*-*-* 00:00:00
+
+[Install]
+WantedBy=timers.target
+```
